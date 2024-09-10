@@ -56,12 +56,13 @@ def main():
         st.session_state.show_question = False
     elif st.session_state.show_question:
         # Mostrar la pregunta actual
-        st.write(st.session_state.next_question)
+        st.write(f"Pregunta actual: {st.session_state.next_question}")
         
         # Opciones de respuesta
         response = st.radio("Selecciona una opción:", ["Sí", "No"], key="response")
         
         if st.button("Enviar"):
+            st.write(f"Respuesta seleccionada: {response}")  # Mensaje de depuración
             # Actualizar el nodo actual basado en la respuesta
             next_node = navigate_tree(st.session_state.node, response)
             
