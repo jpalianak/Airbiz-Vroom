@@ -10,18 +10,6 @@ class DecisionNode:
 # Función para construir el árbol de decisión del modelo Vroom-Yetton-Yago
 def build_tree():
     # Nodos finales con estilos de liderazgo
-    estilo_AI = "Autocrático I (AI)"import streamlit as st
-
-# Definimos la clase para los nodos de decisión
-class DecisionNode:
-    def __init__(self, question, yes=None, no=None):
-        self.question = question
-        self.yes = yes
-        self.no = no
-
-# Función para construir el árbol de decisión del modelo Vroom-Yetton-Yago
-def build_tree():
-    # Nodos finales con estilos de liderazgo
     estilo_AI = "Autocrático I (AI)"
     estilo_AII = "Autocrático II (AII)"
     estilo_CI = "Consultivo I (CI)"
