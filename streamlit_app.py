@@ -43,13 +43,12 @@ def navigate_tree(node, response):
 # Configuración de la aplicación Streamlit
 def main():
     st.title("Árbol de decisión de Vroom-Yetton-Yago")
-    
+
     # Inicialización del estado de la sesión
     if 'node' not in st.session_state:
         st.session_state.node = build_tree()
         st.session_state.final_result = None
         st.session_state.show_question = True
-    
     if st.session_state.final_result:
         st.write(f"Estilo de liderazgo recomendado: {st.session_state.final_result}")
         st.session_state.show_question = False
@@ -72,9 +71,7 @@ def main():
                 st.session_state.final_result = next_node
                 st.session_state.node = None  # Reset node to end
                 st.session_state.show_question = False
-
-    else:
-        st.write("¡Gracias por usar el árbol de decisión!")
+            st.experimental_rerun()  # Forzar actualización de la página
 
 if __name__ == "__main__":
     main()
