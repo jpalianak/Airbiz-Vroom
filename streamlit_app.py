@@ -71,8 +71,7 @@ def main():
                 st.session_state.node = None  # Reset node to end
                 st.session_state.next_question = None
             
-            # Mostrar la pregunta o resultado actualizado
-            st.experimental_rerun()
+            # No es necesario usar st.experimental_rerun() aquí
 
 if __name__ == "__main__":
     main()
