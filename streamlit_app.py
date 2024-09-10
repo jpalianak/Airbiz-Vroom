@@ -49,10 +49,12 @@ def main():
         st.session_state.node = build_tree()
         st.session_state.final_result = None
         st.session_state.next_question = st.session_state.node.question
+        st.session_state.show_question = True
     
     if st.session_state.final_result:
         st.write(f"Estilo de liderazgo recomendado: {st.session_state.final_result}")
-    else:
+        st.session_state.show_question = False
+    elif st.session_state.show_question:
         # Mostrar la pregunta actual
         st.write(st.session_state.next_question)
         
@@ -70,8 +72,7 @@ def main():
                 st.session_state.final_result = next_node
                 st.session_state.node = None  # Reset node to end
                 st.session_state.next_question = None
-            
-            # No es necesario usar st.experimental_rerun() aquí
+                st.session_state.show_question = False
 
 if __name__ == "__main__":
     main()
