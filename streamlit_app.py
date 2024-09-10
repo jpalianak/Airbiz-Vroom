@@ -34,14 +34,11 @@ def build_tree():
     return Q1
 
 # Función para manejar la navegación por el árbol de decisiones
-def navigate_tree(node):
-    if isinstance(node.yes, DecisionNode) or isinstance(node.no, DecisionNode):
-        st.session_state.node = node
-        st.session_state.next_question = node.question
-        st.session_state.final_result = None
+def navigate_tree(node, response):
+    if response == "Sí":
+        return node.yes
     else:
-        st.session_state.node = None
-        st.session_state.final_result = node.yes
+        return node.no
 
 # Configuración de la aplicación Streamlit
 def main():
@@ -63,12 +60,18 @@ def main():
         response = st.radio("Selecciona una opción:", ["Sí", "No"], key="response")
         
         if st.button("Enviar"):
-            if response == "Sí":
-                navigate_tree(st.session_state.node.yes)
-            else:
-                navigate_tree(st.session_state.node.no)
+            # Actualizar el nodo actual basado en la respuesta
+            next_node = navigate_tree(st.session_state.node, response)
             
-            # Recargar la página para mostrar la siguiente pregunta
+            if isinstance(next_node, DecisionNode):
+                st.session_state.node = next_node
+                st.session_state.next_question = next_node.question
+            else:
+                st.session_state.final_result = next_node
+                st.session_state.node = None  # Reset node to end
+                st.session_state.next_question = None
+            
+            # Mostrar la pregunta o resultado actualizado
             st.experimental_rerun()
 
 if __name__ == "__main__":
