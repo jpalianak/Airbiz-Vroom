@@ -69,6 +69,7 @@ def main():
             if isinstance(next_node, DecisionNode):
                 st.session_state.node = next_node
                 st.session_state.next_question = next_node.question
+                st.session_state.show_question = True
             else:
                 st.session_state.final_result = next_node
                 st.session_state.node = None  # Reset node to end
