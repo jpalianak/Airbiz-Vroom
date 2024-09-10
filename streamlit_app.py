@@ -48,7 +48,6 @@ def main():
     if 'node' not in st.session_state:
         st.session_state.node = build_tree()
         st.session_state.final_result = None
-        st.session_state.next_question = st.session_state.node.question
         st.session_state.show_question = True
     
     if st.session_state.final_result:
@@ -56,25 +55,26 @@ def main():
         st.session_state.show_question = False
     elif st.session_state.show_question:
         # Mostrar la pregunta actual
-        st.write(f"Pregunta actual: {st.session_state.next_question}")
+        current_node = st.session_state.node
+        st.write(f"Pregunta actual: {current_node.question}")
         
         # Opciones de respuesta
         response = st.radio("Selecciona una opción:", ["Sí", "No"], key="response")
         
         if st.button("Enviar"):
-            st.write(f"Respuesta seleccionada: {response}")  # Mensaje de depuración
             # Actualizar el nodo actual basado en la respuesta
-            next_node = navigate_tree(st.session_state.node, response)
+            next_node = navigate_tree(current_node, response)
             
             if isinstance(next_node, DecisionNode):
                 st.session_state.node = next_node
-                st.session_state.next_question = next_node.question
                 st.session_state.show_question = True
             else:
                 st.session_state.final_result = next_node
                 st.session_state.node = None  # Reset node to end
-                st.session_state.next_question = None
                 st.session_state.show_question = False
+
+    else:
+        st.write("¡Gracias por usar el árbol de decisión!")
 
 if __name__ == "__main__":
     main()
