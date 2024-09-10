@@ -10,6 +10,18 @@ class DecisionNode:
 # Función para construir el árbol de decisión del modelo Vroom-Yetton-Yago
 def build_tree():
     # Nodos finales con estilos de liderazgo
+    estilo_AI = "Autocrático I (AI)"import streamlit as st
+
+# Definimos la clase para los nodos de decisión
+class DecisionNode:
+    def __init__(self, question, yes=None, no=None):
+        self.question = question
+        self.yes = yes
+        self.no = no
+
+# Función para construir el árbol de decisión del modelo Vroom-Yetton-Yago
+def build_tree():
+    # Nodos finales con estilos de liderazgo
     estilo_AI = "Autocrático I (AI)"
     estilo_AII = "Autocrático II (AII)"
     estilo_CI = "Consultivo I (CI)"
@@ -33,24 +45,43 @@ def build_tree():
     Q1 = DecisionNode("¿Es importante una alta calidad o es absolutamente crítica una buena solución?", Q2, Q4C)
     return Q1
 
-# Función para hacer preguntas y navegar por el árbol de decisiones usando Streamlit
-def ask_question(node):
-    if isinstance(node.yes, DecisionNode):
-        response = st.radio(node.question, ["Sí", "No"], key=node.question)
-        if response == "Sí":
-            ask_question(node.yes)
-        else:
-            ask_question(node.no)
+# Función para manejar la navegación por el árbol de decisiones
+def navigate_tree(node):
+    if isinstance(node.yes, DecisionNode) or isinstance(node.no, DecisionNode):
+        st.session_state.node = node
+        st.session_state.next_question = node.question
+        st.session_state.final_result = None
     else:
-        st.write(f"Estilo de liderazgo recomendado: {node.yes}")
+        st.session_state.node = None
+        st.session_state.final_result = node.yes
 
 # Configuración de la aplicación Streamlit
 def main():
     st.title("Árbol de decisión de Vroom-Yetton-Yago")
-    root = build_tree()
-    st.write("Responde a las preguntas para obtener el estilo de liderazgo recomendado:")
-    ask_question(root)
+    
+    # Inicialización del estado de la sesión
+    if 'node' not in st.session_state:
+        st.session_state.node = build_tree()
+        st.session_state.final_result = None
+        st.session_state.next_question = st.session_state.node.question
+    
+    if st.session_state.final_result:
+        st.write(f"Estilo de liderazgo recomendado: {st.session_state.final_result}")
+    else:
+        # Mostrar la pregunta actual
+        st.write(st.session_state.next_question)
+        
+        # Opciones de respuesta
+        response = st.radio("Selecciona una opción:", ["Sí", "No"], key="response")
+        
+        if st.button("Enviar"):
+            if response == "Sí":
+                navigate_tree(st.session_state.node.yes)
+            else:
+                navigate_tree(st.session_state.node.no)
+            
+            # Recargar la página para mostrar la siguiente pregunta
+            st.experimental_rerun()
 
-# Llamada a la función principal para iniciar la aplicación Streamlit
 if __name__ == "__main__":
     main()
